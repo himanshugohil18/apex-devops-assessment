@@ -40,10 +40,10 @@ flowchart TB
     end
 
     BUILD -.->|Validated image artifact| API
+```
 
-
-3. Application Components
-FastAPI
+## 3. Application Components
+### FastAPI
 Responsibilities:
 - Serve application HTTP requests.
 - Expose liveness and readiness endpoints.
@@ -55,22 +55,22 @@ Endpoints:
 - /health — application liveness.
 - /ready — database readiness.
 - /metrics — Prometheus metrics.
-PostgreSQL
+### PostgreSQL
 Responsibilities:
 - Provide relational database storage.
 - Persist data using a Docker named volume.
 - Expose database health through pg_isready.
-Prometheus
+### Prometheus
 Responsibilities:
 - Scrape API metrics every 15 seconds.
 - Evaluate configured alert rules.
 - Store time-series monitoring data in a persistent volume.
-Grafana
+### Grafana
 Responsibilities:
 - Visualize Prometheus metrics.
 - Display service availability, request rate, errors, and latency.
 - Support operational investigation through dashboards and alerting.
-4. Container Architecture
+## 4. Container Architecture
 The API image uses Python 3.12 slim.
 
 Container security characteristics:
@@ -81,7 +81,7 @@ Container security characteristics:
 Docker Compose connects services using internal service DNS names.
 
 The API connects to PostgreSQL through the db service name. Prometheus scrapes the API through api:8000.
-5. Request Flow
+## 5. Request Flow
 1. A client sends an HTTP request to the API.
 2. FastAPI processes the request.
 3. The request middleware records request count and duration.
@@ -90,7 +90,7 @@ The API connects to PostgreSQL through the db service name. Prometheus scrapes t
 6. The response is returned to the client.
 7. Prometheus periodically collects metrics.
 8. Grafana queries Prometheus to visualize service behavior.
-6. CI Flow
+## 6. CI Flow
 The GitHub Actions workflow is configured for pushes and pull requests targeting main.
 
 Pipeline sequence:
@@ -101,8 +101,8 @@ Pipeline sequence:
 5. Run Pytest.
 6. Build the Docker image.
 Linting and tests must pass before the image build step executes.
-7. Release and Rollback Flow
-Release
+## 7. Release and Rollback Flow
+### Release
 1. Operator requests a new semantic version.
 2. Release script builds the new image.
 3. A temporary container starts.
@@ -111,7 +111,7 @@ Release
 6. The new image is deployed through Docker Compose.
 7. Container health is verified.
 8. Failed deployment validation triggers restoration of the previous version.
-Rollback
+### Rollback
 1. Read current and previous application versions.
 2. Confirm the previous image exists locally.
 3. Update the configured application version.
