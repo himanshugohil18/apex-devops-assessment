@@ -1,0 +1,5 @@
+Release verification: 1.0.1
+2026-10-30T10:14:18+05:30
+{"service":"apex-operations-api","version":"1.0.1"}{"status":"ok"}{"status":"ready","database":"connected"}NAME                           IMAGE                       COMMAND                  SERVICE   CREATED              STATUS                        PORTS
+apex-devops-assessment-api-1   apex-operations-api:1.0.1   "uvicorn app.main:ap…"   api       About a minute ago   Up About a minute (healthy)   127.0.0.1:8001->8000/tcp
+apex-devops-assessment-db-1    postgres:17                 "docker-entrypoint.s…"   db        21 hours ago         Up 23 minutes (healthy)       5432/tcp

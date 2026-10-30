@@ -1,0 +1,15 @@
+Rollback verification
+2026-10-30T10:15:02+05:30
+API response:
+{"service":"apex-operations-api","version":"1.0.0"}
+Health:
+{"status":"ok"}
+Readiness:
+{"status":"ready","database":"connected"}
+Containers:
+NAME                           IMAGE                       COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+apex-devops-assessment-api-1   apex-operations-api:1.0.0   "uvicorn app.main:ap…"   api       39 seconds ago   Up 37 seconds (healthy)   127.0.0.1:8001->8000/tcp
+apex-devops-assessment-db-1    postgres:17                 "docker-entrypoint.s…"   db        21 hours ago     Up 24 minutes (healthy)   5432/tcp
+Release state:
+APP_VERSION=1.0.0
+PREVIOUS_VERSION=1.0.1
