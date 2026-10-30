@@ -165,9 +165,11 @@ The configured GitHub Actions workflow:
 1. Checks out the source.
 2. Sets up Python 3.12.
 3. Installs development dependencies.
-4. Runs Ruff lint checks.
-5. Runs Pytest.
-6. Builds the Docker image.
+4. Audits application dependencies using pip-audit.
+5. Runs Ruff lint checks.
+6. Runs Pytest.
+7. Builds the Docker image.
+8. Scans the image using Trivy for HIGH and CRITICAL vulnerabilities.
 
 Lint and test failures prevent the subsequent image build step.
 
@@ -257,7 +259,7 @@ Keep previous release images available until they are no longer needed for recov
 - Host-facing service ports are bound to localhost.
 - CI repository contents permission is read-only.
 
-Dependency and container image vulnerability scanning should be added and verified before production use.
+Dependency vulnerability auditing with pip-audit and container image scanning with Trivy are included in CI. Production use still requires ongoing security review.
 
 ## 15. Evidence
 

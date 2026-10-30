@@ -97,10 +97,13 @@ Pipeline sequence:
 1. Checkout repository.
 2. Set up Python 3.12.
 3. Install development dependencies.
-4. Execute Ruff lint checks.
-5. Run Pytest.
-6. Build the Docker image.
-Linting and tests must pass before the image build step executes.
+4. Audit application dependencies using pip-audit.
+5. Execute Ruff lint checks.
+6. Run Pytest.
+7. Build the Docker image.
+8. Scan the image using Trivy for HIGH and CRITICAL vulnerabilities.
+
+Linting, tests, and dependency auditing must pass before the image build step executes. The Trivy scan runs after the image is built.
 ## 7. Release and Rollback Flow
 ### Release
 1. Operator requests a new semantic version.
@@ -118,16 +121,19 @@ Linting and tests must pass before the image build step executes.
 4. Deploy the previous image.
 5. Wait for container health.
 6. Restore the original version if rollback validation fails.
-8. Network and Port Mapping
+## 8. Network and Port Mapping
+
 The current compose.yaml configures:
-ServiceInternal portHost port
-API80008002
-PostgreSQL5432Internal only
-Prometheus90909091
-Grafana30003001
+
+| Service | Internal port | Host port |
+|---|---:|---:|
+| API | 8000 | 8002 |
+| PostgreSQL | 5432 | Internal only |
+| Prometheus | 9090 | 9091 |
+| Grafana | 3000 | 3001 |
 
 Host ports are bound to 127.0.0.1 to restrict access to the local machine.
-9. Persistent Storage
+## 9. Persistent Storage
 Named Docker volumes:
 - postgres_data — PostgreSQL data.
 - prometheus_data — Prometheus time-series data.
@@ -135,15 +141,18 @@ Named Docker volumes:
 These volumes are independent of the lifecycle of individual containers.
 
 Routine service shutdown should not remove persistent volumes.
-10. Security Boundaries
+## 10. Security Boundaries
 - Application container executes as a non-root user.
 - Credentials are supplied through environment variables.
 - .env must remain outside source control.
 - Prometheus configuration is mounted read-only.
 - Grafana self-registration is disabled.
 - Host-facing ports are bound to localhost.
+- CI audits application dependencies using pip-audit.
+- CI scans the built Docker image using Trivy for HIGH and CRITICAL vulnerabilities.
+
 Additional production controls would include TLS, centralized secret management, image vulnerability scanning, and authenticated monitoring access.
-11. Architecture Limitations
+## 11. Architecture Limitations
 This is a single-machine local assessment architecture.
 
 It does not provide:
