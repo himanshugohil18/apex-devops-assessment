@@ -44,7 +44,7 @@ jobs:
         run: docker build -t apex-operations-api:${{ github.sha }} .
 
       - name: Scan Docker image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: apex-operations-api:${{ github.sha }}
           format: table
